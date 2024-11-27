@@ -15,15 +15,13 @@ const client = generateClient<Schema>();
 
 export default function App() {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
-  const { signOut } = useAuthenticator();
+  const { user, signOut } = useAuthenticator();
 
   function listTodos() {
     client.models.Todo.observeQuery().subscribe({
       next: (data) => setTodos([...data.items]),
     });
   }
-
-
 
   useEffect(() => {
     listTodos();
@@ -35,21 +33,21 @@ export default function App() {
     });
   }
 
-  function deleteTodo(id:string){
-    client.models.Todo.delete({ id })
+  function deleteTodo(id: string) {
+    client.models.Todo.delete({ id });
   }
 
   return (
     <main>
-      <h1>My todos</h1>
+      <h1>{user?.signInDetails?.loginId}'s todos</h1>
       <button onClick={createTodo}>+ new</button>
       <ul>
-        {todos.map(todo => <li
-          onClick={() => deleteTodo(todo.id)}
-          key={todo.id}>
-          {todo.content}
-        </li>)}
-      </ul> 
+        {todos.map((todo) => (
+          <li onClick={() => deleteTodo(todo.id)} key={todo.id}>
+            {todo.content}
+          </li>
+        ))}
+      </ul>
       <div>
         🥳 App successfully hosted. Try creating a new todo.
         <br />
