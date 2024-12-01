@@ -19,7 +19,7 @@ export default function RootLayout({
 
     <html lang="en">
       <body>      
-        <Authenticator>
+        <Authenticator signUpAttributes={["birthdate"]}>
           {children}
         </Authenticator>
       </body>
